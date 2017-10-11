@@ -17,7 +17,6 @@ export class TopMenuComponent implements OnInit {
     this.afAuth.auth.signInWithEmailAndPassword(email, pass);
   }
   logout() {
-    console.log('logOut')
     this.afAuth.auth.signOut();
   }
   @ViewChild('signInModal')

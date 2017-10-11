@@ -15,10 +15,9 @@ export class EnterPageComponent implements OnInit {
   }
 
   register(email, pass) {
-    console.log(email,pass);
     this.afAuth.auth.createUserWithEmailAndPassword(email, pass);
   }
-  login(email, pass){
-    this.afAuth.auth.signInWithEmailAndPassword(email, pass)
+  login(email, pass) {
+    this.afAuth.auth.signInWithEmailAndPassword(email, pass);
   }
 }

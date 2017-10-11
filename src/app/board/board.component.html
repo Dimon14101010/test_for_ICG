@@ -17,9 +17,6 @@
           <div >{{task.name}}</div>
           <div>
             <bs-modal #modal [animation]="false">
-              <bs-modal-header>
-                <h4 class="modal-title">{{task.name}}</h4>
-              </bs-modal-header>
               <bs-modal-body>
                 <input type="text" placeholder="description" #desc>
                 <button class="btn btn-group-sm" (click)="setDesc(desc.value)">set</button>
@@ -53,14 +50,6 @@
   </div>
   </div>
 </div>
-
-
-
-<pre>{{movedObj | json}}</pre>
-<pre>{{taskArrayList | json}}</pre>
-START
-<pre>{{cloneArray | json}}</pre>
-END
 
 
 

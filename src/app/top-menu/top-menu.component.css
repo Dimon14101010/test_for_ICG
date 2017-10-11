@@ -1,0 +1,8 @@
+.wrapper-top {
+display: flex;
+  flex-direction: row;
+}
+.top-item{
+  margin: 10px;
+  cursor: pointer;
+}

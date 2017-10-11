@@ -14,22 +14,20 @@ export class BoardComponent implements OnInit {
   newTask = {};
   groupsArray = {};
   taskArray: any = [];
-  taskArrayList = {};
+  tempName = {
+    name: ''
+  };
   article: any;
   taskBoards: FirebaseListObservable<any[]>;
   taskGroups: FirebaseListObservable<any[]>;
   taskList: FirebaseListObservable<any[]>;
-  listLength =[];
   cloneArray = [];
   tasks = {};
   taskListLength;
-  startProp;
-  endProp;
   endTime: any;
   times: FirebaseListObservable<any[]>;
   descs: FirebaseListObservable<any[]>;
   keyModal;
-  newItem;
   timeFlag = true;
   movedObj = {
     startBlock: '',
@@ -58,32 +56,25 @@ export class BoardComponent implements OnInit {
     })
     this.taskList.subscribe(list => list.forEach(tasks => {
       this.cloneArray.push(tasks);
-      console.log('tasks array', tasks);
     })
     );
-    console.log('new array', this.cloneArray);
 
     dragulaService.drag.subscribe((value) => {
       this.taskList.subscribe(list => list.forEach(task => {
-        console.log('--- task ---', task);
         if (task.$key === value[2].id) {
           this.movedObj.value = task[value[1].id].name;
           this.movedObj.id = task[value[1].id].id;
           this.movedObj.startPos = task[value[1].id].orderIndex;
           this.movedObj.startBlock = value[2].id;
           this.movedObj.insideID = value[1].id;
-          console.log('this TASKS', task);
         }
       }));
       this.onDrag(value.slice(1));
     });
     dragulaService.drop.subscribe((value) => {
-      console.log('values', value);
       if (value[4]) {
         this.taskList.subscribe(list => list.forEach(task => {
-            console.log('loggggg', task);
             if (task.$key === value[2].id) {
-              console.log('orders', task);
               this.movedObj.endBlock = value[2].id;
               this.movedObj.endPos = task[value[4].id].orderIndex - 1;
             }
@@ -94,16 +85,8 @@ export class BoardComponent implements OnInit {
         this.db.list('/boards/' + this.article + '/groups/tasks/' + value[2].id).
           subscribe(list => this.movedObj.endPos = list.length - 1);
         this.movedObj.endBlock = value[2].id;
-        // this.movedObj.endPos = task[value[2].id];
-        console.log('value4 net');
       }
       this.onDrop(value.slice(1));
-    });
-    dragulaService.over.subscribe((value) => {
-      this.onOver(value.slice(1));
-    });
-    dragulaService.out.subscribe((value) => {
-      this.onOut(value.slice(1));
     });
   }
 
@@ -111,7 +94,6 @@ export class BoardComponent implements OnInit {
   }
   private onDrag(args) {
     let [e, el] = args;
-    console.log('DRAGargs', args);
   }
 
   private onDrop(args) {
@@ -120,7 +102,6 @@ export class BoardComponent implements OnInit {
         this.db.list('/boards/' + this.article + '/groups/tasks/' + this.movedObj.endBlock)
           .subscribe(list => {
             list.forEach(task => {
-              console.log('kkkkk', task);
               for (let i = this.movedObj.startPos; i < list.length; i++) {
                 if (task.orderIndex <= this.movedObj.endPos && task.orderIndex !== 0) {
                   this.db.list('/boards/' + this.article + '/groups/tasks/' + this.movedObj.endBlock)
@@ -138,7 +119,6 @@ export class BoardComponent implements OnInit {
         this.db.list('/boards/' + this.article + '/groups/tasks/' + this.movedObj.endBlock)
           .subscribe(list => {
             list.forEach(task => {
-              console.log('kkkkk', task);
               for (let i = this.movedObj.endPos; i < this.movedObj.startPos; i++) {
                 if (task.orderIndex > this.movedObj.endPos && task.orderIndex !== list.length - 1) {
                   this.db.list('/boards/' + this.article + '/groups/tasks/' + this.movedObj.endBlock)
@@ -154,11 +134,9 @@ export class BoardComponent implements OnInit {
           });
       }
     } else {
-      console.log('other block !!!');
       this.db.list('/boards/' + this.article + '/groups/tasks/' + this.movedObj.endBlock)
         .subscribe(list => {
           list.forEach(task => {
-            console.log('kkkkk', task);
             for (let i = this.movedObj.endPos; i < list.length; i++) {
               if (task.orderIndex > this.movedObj.endPos) {
                 this.db.list('/boards/' + this.article + '/groups/tasks/' + this.movedObj.endBlock)
@@ -173,16 +151,6 @@ export class BoardComponent implements OnInit {
         })
     }
   }
-
-  private onOver(args) {
-    let [e, el, container] = args;
-    console.log('OVERargs', args);
-  }
-
-  private onOut(args) {
-    let [e, el, container] = args;
-    console.log('OUTargs', args);
-  }
   addGroup (value) {
     this.newGroup = {
       id: this.groupsArray,
@@ -193,26 +161,22 @@ export class BoardComponent implements OnInit {
   }
   addTask (name, key) {
     this.db.list('/boards/' + this.article + '/groups/tasks/' + key)
-      .subscribe(list => {this.taskListLength = list.length;
-      list.forEach(task => console.log('task here', task))});
+      .subscribe(list => {this.taskListLength = list.length;});
     this.newTask = {
       id : this.taskListLength + key,
       name : name,
       orderIndex: this.taskListLength
     };
     this.db.list('/boards/' + this.article + '/groups/tasks/' + key).push(this.newTask);
-    console.log('task look', key);
   }
   @ViewChild('modal')
   modal: BsModalComponent;
   close(){
-    console.log('modal closed');
     this.timeFlag = true;
     this.modal.close();
   }
   modOpen(key) {
     this.keyModal = key;
-    console.log('keyModal', key);
     this.db.list('/times').subscribe(res => res.forEach(result => {
       if (result.id === key) {
         this.timeFlag = false;
@@ -223,18 +187,15 @@ export class BoardComponent implements OnInit {
   setEndPoint (endPointDate) {
     this.endTime = endPointDate.toLocaleDateString();
     this.db.list('/times').push({id: this.keyModal, expDate: this.endTime});
-    console.log(this.times);
   }
   updateEndPoint(endPointDate) {
     this.endTime = endPointDate.toLocaleDateString();
     let newTime;
     this.db.list('/times').subscribe(res => res.forEach(result => {
       if (result.id === this.keyModal) {
-        console.log('rabotaet !!!' , result.id);
         this.db.list('/times').update(result.$key, {expDate: this.endTime});
       }
     }));
-    console.log('update item', this.keyModal , newTime);
   }
   setDesc(desc) {
     this.db.list('/descriptions').push({id: this.keyModal, value: desc})

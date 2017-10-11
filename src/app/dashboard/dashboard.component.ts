@@ -13,10 +13,8 @@ export class DashboardComponent implements OnInit {
   taskBoards: FirebaseListObservable<any[]>;
   taskGroups: FirebaseListObservable<any[]>;
   taskList: FirebaseListObservable<any[]>;
-  newBoard = {};
   boardsArray = {};
   boardName;
-  lastName;
   constructor(db: AngularFireDatabase) {
     this.taskBoards = db.list('/boards/name');
     this.taskGroups = db.list('/boards/groups');
@@ -35,7 +33,6 @@ export class DashboardComponent implements OnInit {
     this.modal.open();
   }
   close (name) {
-    console.log('works', this.boardsArray, name);
     this.taskBoards.push({id: this.boardsArray, name});
     this.modal.close();
   }

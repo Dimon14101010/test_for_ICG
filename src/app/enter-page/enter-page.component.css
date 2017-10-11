@@ -1,0 +1,14 @@
+.form-wrapper{
+  margin-top: 30px;
+  display: flex;
+  justify-content: center
+}
+.card{
+  margin: 20px;
+}
+.input-group{
+  padding: 20px;
+}
+.input-group-addon{
+  min-width: 200px;
+}

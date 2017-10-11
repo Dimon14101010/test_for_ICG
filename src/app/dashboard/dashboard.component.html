@@ -1,0 +1,28 @@
+<div class="task-wrapper">
+  <div *ngFor="let board of taskBoards | async" class="card-header" [routerLink]="['/board', board.$key]">
+    {{board.name}}
+    id: {{board.id}}
+  </div>
+</div>
+<div class="create-div" (click)="open()">
+  Create new board
+</div>
+
+<div>
+  <bs-modal #validationModal [animation]="false">
+    <form #modalForm="ngForm">
+      <bs-modal-header [showDismiss]="true">
+        <h4 class="modal-title">Creating new board</h4>
+      </bs-modal-header>
+      <bs-modal-body>
+        <div class="form-group">
+          <label for="boardName">Name of board</label>
+          <input type="text" class="form-control" required [(ngModel)]="boardName" name="boardName" id="boardName">
+        </div>
+      </bs-modal-body>
+      <bs-modal-footer>
+        <button type="button" class="btn btn-primary" [disabled]="!modalForm.valid" (click)="close(boardName)">Save</button>
+      </bs-modal-footer>
+    </form>
+  </bs-modal>
+</div>

@@ -1,0 +1,67 @@
+<div class="task-wrapper">
+  <div class="card text-center">
+
+    <div class="input-group">
+    <input type="text" #groupName>
+    <input type="button" (click)="addGroup(groupName.value)" value="add group">
+    </div>
+    <div class="wrapper-inside">
+    <div class="card-header" *ngFor="let group of taskGroups | async; let i = index"
+         [dragula]="'bag-one'" [id]='group.$key'>
+      {{group.name}}
+      id: {{group.id}}
+      <input type="text" #taskName draggable="false">
+      <input type="button" value="add task" draggable="false" (click)="addTask(taskName.value, group.$key)">
+      <div *ngFor="let task of (tasks[group.$key] | async)" class="card" [id]="task.$key">
+        <div class="card-body" (click)="modOpen(task.$key)">
+          <div >{{task.name}}</div>
+          <div>
+            <bs-modal #modal [animation]="false">
+              <bs-modal-header>
+                <h4 class="modal-title">{{task.name}}</h4>
+              </bs-modal-header>
+              <bs-modal-body>
+                <input type="text" placeholder="description" #desc>
+                <button class="btn btn-group-sm" (click)="setDesc(desc.value)">set</button>
+                <div *ngIf="timeFlag; else update">
+                  SET
+                  <input type="date" placeholder="set endpoint" #endPointDate>
+                  <button class="btn btn-group-sm" (click)="setEndPoint(endPointDate.valueAsDate)">set</button>
+                </div>
+                <ng-template #update>
+                <div>
+                  UPDATE
+                  <input type="date" placeholder="update endpoint" #endPointDate>
+                  <button class="btn btn-group-sm" (click)="updateEndPoint(endPointDate.valueAsDate)">update</button>
+                </div>
+              </ng-template>
+                <div  *ngFor="let time of times | async">
+                  <div *ngIf="time.id === keyModal">this task expired in : {{time.expDate}}</div>
+                </div>
+                <div *ngFor="let desc of descs | async">
+                  <div *ngIf="desc.id === keyModal">description : {{desc.value}}</div>
+                </div>
+              </bs-modal-body>
+              <bs-modal-footer>
+                <button type="button" class="btn btn-primary" (click)="close()">Ok</button>
+              </bs-modal-footer>
+            </bs-modal>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+
+<pre>{{movedObj | json}}</pre>
+<pre>{{taskArrayList | json}}</pre>
+START
+<pre>{{cloneArray | json}}</pre>
+END
+
+
+
+

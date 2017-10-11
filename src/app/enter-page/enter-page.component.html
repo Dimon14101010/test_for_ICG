@@ -1,0 +1,50 @@
+<div class="form-wrapper">
+  <div class="card text-center">
+    <div class="card-header">
+      Authorization
+    </div>
+
+    <div class="card-block">
+      <form name="auth">
+        <div class="input-group">
+          <span class="input-group-addon">Email</span>
+          <input type="email" class="form-control" placeholder="E-mail" #authEmail>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Password</span>
+          <input type="password" class="form-control" placeholder="Password" #authPass>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer">
+      <button type="button" class="btn btn-outline-primary" routerLink="dashboard" (click)="login(authEmail.value, authPass.value)">Sign In</button>
+    </div>
+
+  </div>
+
+  <div class="card text-center">
+
+    <div class="card-header">
+      Registration
+    </div>
+
+    <div class="card-block">
+      <form name="reg">
+        <div class="input-group">
+          <span class="input-group-addon">Email</span>
+          <input type="email" class="form-control" placeholder="E-mail" #regEmail>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Password</span>
+          <input type="password" class="form-control" placeholder="Password" #regPass>
+        </div>
+
+      </form>
+    </div>
+    <div class="card-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="register(regEmail.value, regPass.value)">Sign Up</button>
+    </div>
+
+  </div>
+
+</div>
